@@ -1,0 +1,112 @@
+execute pathogen#infect()
+syntax on
+filetype plugin indent on
+
+" fancy color stuff for vim
+syntax enable
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
+
+" nerdTree stuff
+
+" Show hidden files in nerdtree
+let NERDTreeShowHidden=1
+
+" load nerdtree and point cursor to main on startup
+autocmd VimEnter * NERDTree
+autocmd VimEnter * wincmd p
+
+" Close NERDTree if it is the last open buffer
+autocmd WinEnter * call s:CloseIfOnlyNerdTreeLeft()
+
+" Close all open buffers on entering a window if the only
+" buffer that's left is the NERDTree buffer
+function! s:CloseIfOnlyNerdTreeLeft()
+  if exists("t:NERDTreeBufName")
+    if bufwinnr(t:NERDTreeBufName) != -1
+      if winnr("$") == 1
+        q
+      endif
+    endif
+  endif
+endfunction
+
+" open a NERDTree automatically when vim starts up if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" use different arrows for nerdTree
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+
+" Strip trailing whitespace (,ss)
+function! StripWhitespace()
+        let save_cursor = getpos(".")
+        let old_query = getreg('/')
+        :%s/\s\+$//e
+        call setpos('.', save_cursor)
+        call setreg('/', old_query)
+endfunction
+noremap <leader>ss :call StripWhitespace()<CR>
+
+" Make tabs as wide as two spaces
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+" Add the g flag to search/replace by default
+set gdefault
+
+" Use UTF-8 without BOM
+set encoding=utf-8
+
+" Centralize backups, swapfiles and undo history
+set backupdir=~/.vim/backups
+set directory=~/.vim/swaps
+if exists("&undodir")
+        set undodir=~/.vim/undo
+endif
+
+" Show “invisible” characters
+set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
+set list
+
+" Highlight searches
+set hlsearch
+
+" Ignore case of searches
+set ignorecase
+
+" Highlight dynamically as pattern is typed
+set incsearch
+
+" Always show status line
+set laststatus=2
+
+" Disable error bells
+set noerrorbells
+
+" Don’t reset cursor to start of line when moving around.
+set nostartofline
+
+" Show the cursor position
+set ruler
+
+" Don’t show the intro message when starting Vim
+set shortmess=atI
+
+" Show the current mode
+set showmode
+
+" Show the filename in the window titlebar
+set title
+
+" Show the (partial) command as it’s being typed
+set showcmd
+
+" enable line numbers
+set number
+
+" highlight current line
+set cursorline
